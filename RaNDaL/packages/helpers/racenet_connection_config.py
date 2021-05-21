@@ -2,8 +2,8 @@ from configparser import ConfigParser
 
 
 def config(
-        filename: str = "files//config_files//racenetdb.ini",
-        section: str = "postgresql") -> dict:
+        filename: str = "files//db_configs//racenetdb.ini",
+        section: str = "Postgres") -> dict:
     """
     Gets the database info from the .ini file
     :param filename: Location of the .ini file, this needs to be its full path

@@ -37,7 +37,7 @@ def livemode(model, rn, load_entry_list):
         current_category = -1
         entry_list = []
 
-    capture = VideoCapture("http://192.168.0.11:8081/video.mjpg")
+    capture = VideoCapture("http://10.10.1.11:8081/video.mjpg")
     while capture.isOpened():
         ret, img = capture.read()
         rs = RaceScreen(img, model, entry_list)
