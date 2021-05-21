@@ -29,6 +29,19 @@ def testmode(model, rn):
         waitKey(0)
 
 
+def identical_prediction_lists(prev_prediction_list, curr_prediction_list):
+    """
+    Check if two predictions lists are the same
+    :param prev_prediction_list: list Last iterations predictions
+    :param curr_prediction_list: list current iterations predictions
+    :return: bool false = not identical, true = identical
+    """
+    for x, y in zip(prev_prediction_list, curr_prediction_list):
+        if x != y:
+            return False
+    return True
+
+
 def livemode(model, rn, load_entry_list):
     if load_entry_list:
         current_category = rn.select_current_category()
@@ -37,12 +50,17 @@ def livemode(model, rn, load_entry_list):
         current_category = -1
         entry_list = []
 
+    prev_prediction_list = ['']
+
     capture = VideoCapture("http://10.10.1.11:8081/video.mjpg")
     while capture.isOpened():
         ret, img = capture.read()
         rs = RaceScreen(img, model, entry_list)
-        rn.insert_predictions(rs.predictions_list())
-        print(rs.to_table())
+
+        if not identical_prediction_lists(prev_prediction_list, rs.predictions_list()):
+            rn.insert_predictions(rs.predictions_list())
+            print(rs.to_table())
+            prev_prediction_list = rs.predictions_list()
 
         if load_entry_list:
             if current_category != rn.select_current_category():
