@@ -2,7 +2,7 @@ import argparse
 import csv
 import os
 
-from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize
+from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize, destroyAllWindows
 from tensorflow.python.keras.models import load_model
 
 from packages.models.racescreen import RaceScreen
