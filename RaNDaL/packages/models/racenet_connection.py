@@ -53,7 +53,7 @@ class RacenetConnection:
         finally:
             self.close_connection()
 
-    def select_current_category(self) -> int:
+    def select_current_category_id(self) -> int:
         """
         Get the current selected category from the DB
         :return: int Current category id
@@ -72,6 +72,27 @@ class RacenetConnection:
             self.close_connection()
 
         return current_category
+
+    def select_current_category_name(self, current_category_id):
+        """
+        Get current category name
+        :param current_category_id:Id of the category
+        :return: The category name
+        """
+        current_name = ""
+        try:
+            self.open_connection()
+            cur = self.conn.cursor()
+            cur.execute('SELECT name from rn_categ where id = ' + str(current_category_id))
+            current_name = (cur.fetchone())[0].strip()
+            cur.close()
+        except (Exception, DatabaseError) as error:
+            print(error)
+        finally:
+            self.close_connection()
+
+        return current_name
+
 
     def select_entry_list(self, current_category: int) -> list:
         """

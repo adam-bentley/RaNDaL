@@ -10,7 +10,7 @@ from RaNDaL.packages.models.text_fields.bool_field import BoolField
 
 
 class RaceScreen:
-    def __init__(self, image: ndarray, model: Sequential, entry_list: list = []):
+    def __init__(self, category_name, image: ndarray, model: Sequential, entry_list: list = []):
         """
         Constructor for the race screen
         :type image: Image of the race computer screen
@@ -19,6 +19,8 @@ class RaceScreen:
         image = median_filter(image, kernel_size=1)
         image = gray(image)
         image = threshold(image)
+
+        self.category_name = category_name
 
         # Tree
         self.tree = Tree(image[921:948, 575:860], model, inverted=True)
@@ -66,7 +68,7 @@ class RaceScreen:
         """
         # Output data
         data = [
-            ['Left Lane', '', 'Right Lane'],
+            ['Left Lane', self.category_name, 'Right Lane'],
             # ['', self.tower_ready.text, ''],
             [self.left_race_num.text, 'VS', self.right_race_num.text],
             [self.left_dial_in.text, 'Dial-in', self.right_dial_in.text],

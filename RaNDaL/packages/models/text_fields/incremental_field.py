@@ -52,9 +52,10 @@ class IncrementalField(TextArea):
         if self.text == ".":
             self.text = "00.00"
 
-        if self.text[0] == "+" or self.text[0] == "-":
-            if self.text[1] == ".":
-                self.text = self.text[0] + "0" + self.text[1:]
+        if len(self.text) > 1:
+            if self.text[0] == "+" or self.text[0] == "-":
+                if self.text[1] == ".":
+                    self.text = self.text[0] + "0" + self.text[1:]
 
     def fix_character_splitting(self):
         """
