@@ -1,12 +1,12 @@
 from numpy import ndarray
 from tensorflow.python.keras import Sequential
 
-from .text_field import TextArea
-from ...helpers.segmentation import split_characters, fix_racenum_splitting
-from ...helpers.postprocessing import weighted_hamming_distance
+from RaNDaL.packages.models.text_fields.text_field import TextArea
+from RaNDaL.packages.helpers.segmentation import split_characters, fix_racenum_splitting
+from RaNDaL.packages.helpers.postprocessing import weighted_hamming_distance
 
 
-class RaceNumberArea(TextArea):
+class RaceNumberField(TextArea):
     def __init__(self, frame: ndarray, model: Sequential, entry_list: list, inverted: bool = False):
         """
         Constructor for race number text area

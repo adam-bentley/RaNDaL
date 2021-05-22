@@ -2,14 +2,14 @@ import argparse
 import csv
 import os
 
-from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize
+from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize, destroyAllWindows
 from tensorflow.python.keras.models import load_model
 
 from packages.models.racescreen import RaceScreen
 from packages.models.racenet_connection import RacenetConnection
 
 
-def testmode(model, rn):
+def test_mode(model, rn):
     test_images_dir = "..//data//test_images//"
 
     # Entry list for the test images
@@ -42,7 +42,7 @@ def identical_prediction_lists(prev_prediction_list, curr_prediction_list):
     return True
 
 
-def livemode(model, rn, load_entry_list):
+def live_mode(model, rn, load_entry_list):
     if load_entry_list:
         current_category = rn.select_current_category()
         entry_list = rn.select_entry_list(current_category)
@@ -66,6 +66,9 @@ def livemode(model, rn, load_entry_list):
             if current_category != rn.select_current_category():
                 current_category = rn.select_current_category()
                 entry_list = rn.select_current_category(current_category)
+
+        # imshow('frame', rs.cell_warning.frame)
+        # waitKey(0)
 
 
 if __name__ == "__main__":
@@ -93,6 +96,6 @@ if __name__ == "__main__":
     rn.test_connection()
 
     if args.testmode:
-        testmode(model, rn)
+        test_mode(model, rn)
     else:
-        livemode(model, rn, args.entrylist)
+        live_mode(model, rn, args.entrylist)

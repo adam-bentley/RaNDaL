@@ -7,7 +7,7 @@ from ...helpers.segmentation import split_characters
 from .text_field import TextArea
 
 
-class IncrementalArea(TextArea):
+class IncrementalField(TextArea):
     def __init__(self, frame: ndarray, model: Sequential, max_length: int = 7, inverted: bool = False):
         """
         Constructor for a incremental area of text
@@ -64,7 +64,10 @@ class IncrementalArea(TextArea):
         """
         # TODO clean this
         # Find the index of the decimal
-        dp_index = self.text.index(".")
+        try:
+            dp_index = self.text.index(".")
+        except ValueError:
+            return
 
         # If the 1st character is too small, merge right
         if self.characters[0].shape[1] < 11 and len(self.characters) != self.max_length:
