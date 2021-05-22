@@ -22,11 +22,12 @@ class RaceScreen:
 
         # Tree
         self.tree = Tree(image[921:948, 575:860], model, inverted=True)
+        self.cell_warning = BoolField(image[176:200, 983:1002], "CELL WARNING", inverted=False)
 
         # Left lane values
         self.left_race_num = RaceNumberField(image[175:202, 270:550], model, entry_list, inverted=True)
         self.left_dial_in = IncrementalField(image[175:202, 720:910], model, max_length=5, inverted=True)
-        self.left_staged = BoolField(image[91:120, 142:285])
+        self.left_staged = BoolField(image[91:120, 142:285], "STAGED")
 
         self.left_reaction = IncrementalField(image[217: 243, 580:875], model, max_length=8)
         self.left_60_et = IncrementalField(image[258: 284, 580:875], model)
@@ -44,7 +45,7 @@ class RaceScreen:
         # Right lane
         self.right_race_num = RaceNumberField(image[175:202, 1230:1510], model, entry_list, inverted=True)
         self.right_dial_in = IncrementalField(image[175:202, 1700:1870], model, max_length=5, inverted=True)
-        self.right_staged = BoolField(image[92:119, 1702:1845])
+        self.right_staged = BoolField(image[92:119, 1702:1845], "STAGED")
 
         self.right_reaction = IncrementalField(image[217: 243, 1500:1850], model, max_length=8)
         self.right_60_et = IncrementalField(image[258: 284, 1500:1850], model)
@@ -81,7 +82,8 @@ class RaceScreen:
             [self.left_1320_speed.text, '1320 ET', self.right_1320_speed.text],
             [self.left_next_race_num.text, 'VS', self.right_next_race_num.text],
             [self.left_next_dial_in.text, 'Dial-in', self.right_next_dial_in.text],
-            ['', self.tree.text, '']
+            ['', self.tree.text, ''],
+            ['', self.cell_warning.text, ''],
         ]
 
         table = AsciiTable(data)

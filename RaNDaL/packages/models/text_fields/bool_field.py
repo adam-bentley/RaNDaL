@@ -6,7 +6,7 @@ from RaNDaL.packages.helpers.segmentation import has_characters, split_character
 
 
 class BoolField(TextArea):
-    def __init__(self, frame: ndarray):
+    def __init__(self, frame: ndarray, active_text: str, inverted: bool = True):
         """
         Constructor for bool text field (On or off)
         i.e Staged, cell out, tower ready etc
@@ -14,9 +14,9 @@ class BoolField(TextArea):
         :param inverted: If its white text on a black background or black on white
         """
         # Call parent
-        super().__init__(frame, None, inverted=True)
+        super().__init__(frame, None, inverted=inverted)
 
         self.active = has_characters(self.frame.copy())
 
         if self.active:
-            self.text = "STAGED"
+            self.text = active_text

@@ -183,6 +183,7 @@ def has_characters(text_field_frame):
     Checks if text field has at least 1 character
     :param text_field_frame: The frame of the text field
     """
+    #print(calc_projection(text_field_frame))
     if max(calc_projection(text_field_frame)) > 0:
         print("true")
         return True
