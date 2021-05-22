@@ -146,6 +146,9 @@ def fix_racenum_splitting(characters: list) -> list:
         deletes.append(i + 1)
         i += 2
 
+        if i > len(characters):
+            break
+
     i = -1
     # This does the same but from the end of the characters
     # it merges the first character the second and adds the first to the delete pile
@@ -153,6 +156,9 @@ def fix_racenum_splitting(characters: list) -> list:
         characters[i - 1] = hconcat([characters[i - 1], characters[i]])
         deletes.append(i)
         i -= 2
+
+        if i < 0:
+            break
 
     # Remove all the bad characters
     for index in deletes[::-1]:

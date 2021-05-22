@@ -66,6 +66,9 @@ def live_mode(model, rn, load_entry_list):
             if current_category != rn.select_current_category():
                 current_category = rn.select_current_category()
                 entry_list = rn.select_current_category(current_category)
+                entry_list.append("NONE")
+                entry_list.append("BYE")
+
 
         # imshow('frame', rs.cell_warning.frame)
         # waitKey(0)
