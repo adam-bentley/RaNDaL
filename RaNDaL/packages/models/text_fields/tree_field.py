@@ -25,6 +25,8 @@ class Tree(TextArea):
 
             self.text = self.predict()
 
+            print(self.text[0])
+
             if self.text[0] == "D":
                 self.text = "D"
             elif self.text[0] == ".":

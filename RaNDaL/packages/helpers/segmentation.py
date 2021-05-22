@@ -100,7 +100,7 @@ def split_characters(text_area_frame, ideal_projection=1):
             while vertical_projection[next_column] >= ideal_projection:
                 next_column += 1
                 # Check not on last column of image
-                if next_column == image_width-1:
+                if next_column == image_width - 1:
                     break
 
             # Store the end character
@@ -130,6 +130,10 @@ def fix_racenum_splitting(characters: list) -> list:
     :param characters: List of split characters
     :return: List of reconstructed characters
     """
+
+    if len(characters) == 0:
+        return characters
+
     deletes = []
     i = 0
     # Characters normally only spilt once,
@@ -157,7 +161,7 @@ def fix_racenum_splitting(characters: list) -> list:
 
     # Loops through each character, if the width is less then 11, its a split character
     # Find which side is smaller and merge them together
-    for i in range(0, len(characters)):
+    for i in range(0, len(characters)-1):
         if characters[i].shape[1] < 11:
             left_width = characters[i - 1].shape[1]
             right_width = characters[i + 1].shape[1]
@@ -183,9 +187,7 @@ def has_characters(text_field_frame):
     Checks if text field has at least 1 character
     :param text_field_frame: The frame of the text field
     """
-    #print(calc_projection(text_field_frame))
+    # print(calc_projection(text_field_frame))
     if max(calc_projection(text_field_frame)) > 0:
-        print("true")
         return True
-    print("false")
     return False
