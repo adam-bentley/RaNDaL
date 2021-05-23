@@ -120,11 +120,11 @@ class RacenetConnection:
             self.close_connection()
         return racenumbers
 
-    def insert_predictions(self, rs: RaceScreen):
+    def insert_predictions(self, predictions: tuple):
         """
 		Clear the cnn_prediction table and
         Insert new predictions into the database
-        :param prediction_list: Race screen with all the parameters
+        :param predictions: Race screen tuple with all the parameters
         """
         try:
             self.open_connection()
@@ -143,7 +143,7 @@ class RacenetConnection:
 	            rightreaction, rightet60, rightet330, rightet660, rightspeed660, 
 	            rightet1000, rightspeed1000, rightet1320, rightspeed1320, 
 	            rightnextracenum, rightnextindex)
-	        VALUES """ + str(rs.to_tuple())
+	        VALUES """ + str(tuple)
 
             self.conn.commit()
             cur.close()
@@ -167,5 +167,3 @@ def convert_list(prediction_list: list) -> list:
             string += "NULL,"
 
     return string[:-1]
-
-

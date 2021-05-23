@@ -52,13 +52,13 @@ def live_mode(model, rn, load_entry_list):
         category_name = ""
         entry_list = []
 
-    prev_prediction_list = ['']
+    prev_prediction_list = ('', '')
 
     capture = VideoCapture("http://10.10.1.11:8081/video.mjpg")
     while capture.isOpened():
         ret, img = capture.read()
         rs = RaceScreen(category_name, img, model, entry_list)
-        
+
         if not identical_prediction_lists(prev_prediction_list, rs.to_tuple()):
             rn.insert_predictions(rs.to_tuple())
             print(rs.to_table())
