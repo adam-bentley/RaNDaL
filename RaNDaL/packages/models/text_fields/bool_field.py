@@ -1,8 +1,7 @@
 from numpy import ndarray
-from tensorflow.python.keras import Sequential
 
+from RaNDaL.packages.helpers.segmentation import has_characters
 from RaNDaL.packages.models.text_fields.text_field import TextArea
-from RaNDaL.packages.helpers.segmentation import has_characters, split_characters
 
 
 class BoolField(TextArea):

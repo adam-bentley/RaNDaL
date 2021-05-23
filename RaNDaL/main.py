@@ -58,11 +58,11 @@ def live_mode(model, rn, load_entry_list):
     while capture.isOpened():
         ret, img = capture.read()
         rs = RaceScreen(category_name, img, model, entry_list)
-
-        if not identical_prediction_lists(prev_prediction_list, rs.predictions_list()):
-            rn.insert_predictions(rs.predictions_list())
+        
+        if not identical_prediction_lists(prev_prediction_list, rs.to_tuple()):
+            rn.insert_predictions(rs.to_tuple())
             print(rs.to_table())
-            prev_prediction_list = rs.predictions_list()
+            prev_prediction_list = rs.to_tuple()
 
         if load_entry_list:
             if current_category != rn.select_current_category_id():
@@ -70,10 +70,6 @@ def live_mode(model, rn, load_entry_list):
                 entry_list = rn.select_entry_list(current_category)
                 entry_list.append("NONE")
                 entry_list.append("BYE")
-
-
-        # imshow('frame', rs.cell_warning.frame)
-        # waitKey(0)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 from numpy import ndarray
 from tensorflow.python.keras import Sequential
 from terminaltables import AsciiTable
+import json
 
 from RaNDaL.packages.helpers.preprocessing import median_filter, gray, threshold
 from RaNDaL.packages.models.text_fields.tree_field import Tree
@@ -95,38 +96,42 @@ class RaceScreen:
 
         return table.table
 
-    def predictions_list(self) -> list:
-        """
-        Get all the predicts as a list
-        """
-        # TODO handle these
-        return list((
-            # self.tower_ready.text,
-            self.tree.text,
-            self.left_race_num.text,
-            self.left_dial_in.text,
-            self.left_reaction.text,
-            self.left_60_et.text,
-            self.left_330_et.text,
-            self.left_660_et.text,
-            self.left_660_speed.text,
-            self.left_1000_et.text,
-            self.left_1000_speed.text,
-            self.left_1320_et.text,
-            self.left_1320_speed.text,
-            self.left_next_race_num.text,
-            self.left_next_dial_in.text,
+    def to_tuple(self) -> tuple:
+        query = ("",
+                 self.tree.text,
+                 "",
+                 str(self.cell_warning.active),
+                 "",
 
-            self.right_race_num.text,
-            self.right_dial_in.text,
-            self.right_reaction.text,
-            self.right_60_et.text,
-            self.right_330_et.text,
-            self.right_660_et.text,
-            self.right_660_speed.text,
-            self.right_1000_et.text,
-            self.right_1000_speed.text,
-            self.right_1320_et.text,
-            self.right_1320_speed.text,
-            self.right_next_race_num.text,
-            self.right_next_dial_in.text))
+                 self.left_race_num.text,
+                 str(self.left_staged.active),
+                 self.left_dial_in.text,
+                 self.left_reaction.text,
+                 self.left_60_et.text,
+                 self.left_330_et.text,
+                 self.left_660_et.text,
+                 self.left_660_speed.text,
+                 self.left_1000_et.text,
+                 self.left_1000_speed.text,
+                 self.left_1320_et.text,
+                 self.left_1320_speed.text,
+                 self.left_next_race_num.text,
+                 self.left_next_dial_in.text,
+
+                 self.right_race_num.text,
+                 str(self.right_staged.active),
+                 self.right_dial_in.text,
+                 self.right_reaction.text,
+                 self.right_60_et.text,
+                 self.right_330_et.text,
+                 self.right_660_et.text,
+                 self.right_660_speed.text,
+                 self.right_1000_et.text,
+                 self.right_1000_speed.text,
+                 self.right_1320_et.text,
+                 self.right_1320_speed.text,
+                 self.right_next_race_num.text,
+                 self.right_next_dial_in.text,
+                 )
+
+        return query

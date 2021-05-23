@@ -1,3 +1,5 @@
+import json
+
 from numpy import ndarray
 from tensorflow.python.keras import Sequential
 
@@ -26,20 +28,23 @@ class Tree(TextArea):
             self.text = self.predict()
 
             if self.text[0] == "D" or self.text[0] == "I":
-                self.text = "D"
+                self.text = "Delay Tree"
             elif self.text[0] == ".":
                 # If the second letter is a 5
                 # It could be a .5 Full, .5 X-OVER
                 # or .5 Pro Tree
                 if self.text[1] == "5":
                     if self.text[2] == "F":
-                        self.text = ".5F"
+                        self.text = ".5 Full Tree"
                     elif self.text[2] == "X":
                         self.text = ".5X"
                     elif self.text[2] == "P":
-                        self.text = ".5P"
+                        self.text = ".5 Pro Tree"
                     else:
                         self.text = ""
                 # It not .5 or 'D', it has to be a .4 Pro Tree
                 elif self.text[1] == "4":
-                    self.text = ".4P"
+                    self.text = ".4 Pro Tree"
+
+    def toJson(self):
+        return json.dumps(self)
