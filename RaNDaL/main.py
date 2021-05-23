@@ -62,6 +62,9 @@ def live_mode(model, rn, load_entry_list):
         ret, img = capture.read()
         rs = RaceScreen(category_name, img, model, entry_list)
 
+        if not rs.valid:
+            continue
+
         if not identical_prediction_lists(prev_prediction_list, rs.to_tuple()):
             rn.insert_predictions(rs.to_tuple())
             print(rs.to_table())
