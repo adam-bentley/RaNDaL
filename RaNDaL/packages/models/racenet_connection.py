@@ -1,6 +1,6 @@
 from psycopg2 import DatabaseError, connect
 
-from ..helpers.racenet_connection_config import config
+from RaNDaL.packages.helpers.racenet_connection_config import config
 
 
 class RacenetConnection:
@@ -93,7 +93,6 @@ class RacenetConnection:
 
         return current_name
 
-
     def select_entry_list(self, current_category: int) -> list:
         """
         Gets a list of racenumbers for the selected category for postprocessing
@@ -120,24 +119,31 @@ class RacenetConnection:
             self.close_connection()
         return racenumbers
 
-    def insert_predictions(self, prediction_list: list):
+    def insert_predictions(self, predictions: tuple):
         """
 		Clear the cnn_prediction table and
         Insert new predictions into the database
-        :param prediction_list: list of predictions
+        :param predictions: Race screen tuple with all the parameters
         """
         try:
-            predictions = convert_list(prediction_list)
             self.open_connection()
             cur = self.conn.cursor()
 
             cur.execute("DELETE FROM cnn_currentpair")
 
-            cur.execute("INSERT INTO cnn_currentpair(tree, leftracenum,leftindex,leftreaction,leftet60,leftet330," +
-                        "leftet660,leftspeed660,leftet1000, leftspeed1000, leftet1320,leftspeed1320, leftnextracenum," +
-                        "leftnextindex,rightracenum, rightindex,rightreaction,rightet60,rightet330,rightet660," +
-                        "rightspeed660, rightet1000, rightspeed1000, rightet1320,rightspeed1320,rightnextracenum," +
-                        "rightnextindex)  VALUES (" + predictions + ")")
+            sql = """
+            INSERT INTO public.cnn_currentpair(
+	            datetime, tree, towerready, cellwarning, runactive, 
+	            leftracenum, leftstaged, leftindex, 
+	            leftreaction, leftet60, leftet330, leftet660, leftspeed660, 
+	            leftet1000, leftspeed1000, leftet1320, leftspeed1320, 
+	            leftnextracenum, leftnextindex, 
+	            rightracenum, rightstaged, rightindex, 
+	            rightreaction, rightet60, rightet330, rightet660, rightspeed660, 
+	            rightet1000, rightspeed1000, rightet1320, rightspeed1320, 
+	            rightnextracenum, rightnextindex)
+	        VALUES """ + str(tuple)
+
             self.conn.commit()
             cur.close()
             self.close_connection()

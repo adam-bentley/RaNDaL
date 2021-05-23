@@ -4,9 +4,11 @@ import os
 
 from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize, destroyAllWindows
 from tensorflow.python.keras.models import load_model
+import asyncio
 
-from packages.models.racescreen import RaceScreen
-from packages.models.racenet_connection import RacenetConnection
+from RaNDaL.packages.models.racescreen import RaceScreen
+from RaNDaL.packages.models.racenet_connection import RacenetConnection
+from RaNDaL.packages.models.cell_warning_notification import CellWarningNotification
 
 
 def test_mode(model, rn):
@@ -52,17 +54,20 @@ def live_mode(model, rn, load_entry_list):
         category_name = ""
         entry_list = []
 
-    prev_prediction_list = ['']
+    prev_prediction_list = ('', '')
 
     capture = VideoCapture("http://10.10.1.11:8081/video.mjpg")
     while capture.isOpened():
         ret, img = capture.read()
         rs = RaceScreen(category_name, img, model, entry_list)
 
-        if not identical_prediction_lists(prev_prediction_list, rs.predictions_list()):
-            rn.insert_predictions(rs.predictions_list())
+        if not identical_prediction_lists(prev_prediction_list, rs.to_tuple()):
+            rn.insert_predictions(rs.to_tuple())
             print(rs.to_table())
-            prev_prediction_list = rs.predictions_list()
+            prev_prediction_list = rs.to_tuple()
+
+        if rs.cell_warning.active:
+            CellWarningNotification().alert()
 
         if load_entry_list:
             if current_category != rn.select_current_category_id():
@@ -70,10 +75,6 @@ def live_mode(model, rn, load_entry_list):
                 entry_list = rn.select_entry_list(current_category)
                 entry_list.append("NONE")
                 entry_list.append("BYE")
-
-
-        # imshow('frame', rs.cell_warning.frame)
-        # waitKey(0)
 
 
 if __name__ == "__main__":
