@@ -146,7 +146,7 @@ def fix_racenum_splitting(characters: list) -> list:
         deletes.append(i + 1)
         i += 2
 
-        if i >= len(characters):
+        if i >= len(characters)-1:
             break
 
     # Remove all the bad characters

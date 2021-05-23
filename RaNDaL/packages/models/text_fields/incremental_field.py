@@ -70,79 +70,97 @@ class IncrementalField(TextArea):
         except ValueError:
             return
 
-        # If the 1st character is too small, merge right
-        if self.characters[0].shape[1] < 11 and len(self.characters) != self.max_length:
-            # Merge and remove
-            self.characters[0] = hconcat([self.characters[0], self.characters[1]])
-            self.characters.pop(1)
-
-            dp_index -= 1
-
-            # If character 1 is a split and so is character 3, character 3 must belong to character 4
-            if self.characters[1].shape[1] < 11:
-                self.characters[1] = hconcat([self.characters[1], self.characters[2]])
-                self.characters.pop(2)
-
-                dp_index -= 1
-
-        # If the last character is too small, merge left
-        if self.characters[-1].shape[1] < 11 and len(self.characters) != self.max_length:
-            self.characters[-2] = hconcat([self.characters[-2], self.characters[-1]])
-            self.characters.pop(-1)
-
-            # If character -1 is a split and so is character -3, character -3 must belong to character -4
-            if self.characters[-2].shape[1] < 11:
-                self.characters[-3] = hconcat([self.characters[-3], self.characters[-2]])
-                self.characters.pop(-2)
-
-        # If the character before the decimal is too small, merge left
-        if self.characters[dp_index - 1].shape[1] < 11 and len(self.characters) != self.max_length:
-            self.characters[dp_index - 2] = hconcat([self.characters[dp_index - 2], self.characters[dp_index - 1]])
-            self.characters.pop(dp_index - 1)
-            dp_index -= 1
-
-            # If the character before and 2 before the decimal is too small,
-            # 2 before must belong to the character 3 before
-            if self.characters[dp_index - 2].shape[1] < 11:
-                self.characters[dp_index - 3] = hconcat([self.characters[dp_index - 3], self.characters[dp_index - 2]])
-                self.characters.pop(dp_index - 2)
-                dp_index -= 1
-
-        # If the character after the decimal is too small, merge right
-        if self.characters[dp_index + 1].shape[1] < 11 and len(self.characters) != self.max_length:
-            self.characters[dp_index + 1] = hconcat([self.characters[dp_index + 1], self.characters[dp_index + 2]])
-            self.characters.pop(dp_index + 2)
-
-            # If the character after and 2 after the decimal is too small,
-            # 2 after must belong to the character 3 after
-            if self.characters[dp_index + 2].shape[1] < 11:
-                self.characters[dp_index + 2] = hconcat([self.characters[dp_index + 2], self.characters[dp_index + 3]])
-                self.characters.pop(dp_index + 3)
-
-        # If only 1 split between 2 numbers in the first half of the number, join the the smallest
-        if self.characters[1].shape[1] < 11 and len(self.characters) != self.max_length:
-            left = self.characters[0].shape[1]
-            right = self.characters[2].shape[1]
-
-            if right > left:
+        try:
+            # If the 1st character is too small, merge right
+            if self.characters[0].shape[1] < 11 and len(self.characters) != self.max_length:
+                # Merge and remove
                 self.characters[0] = hconcat([self.characters[0], self.characters[1]])
                 self.characters.pop(1)
-            else:
-                self.characters[2] = hconcat([self.characters[1], self.characters[2]])
-                self.characters.pop(1)
+
                 dp_index -= 1
 
-        # If only 1 split between 2 numbers in the second half of the number, join the the smallest
-        if self.characters[-2].shape[1] < 11 and len(self.characters) != self.max_length:
-            left = self.characters[-3].shape[1]
-            right = self.characters[-1].shape[1]
+                # If character 1 is a split and so is character 3, character 3 must belong to character 4
+                if self.characters[1].shape[1] < 11:
+                    self.characters[1] = hconcat([self.characters[1], self.characters[2]])
+                    self.characters.pop(2)
 
-            if right > left:
-                self.characters[-3] = hconcat([self.characters[-3], self.characters[-2]])
-                self.characters.pop(-2)
-            else:
-                self.characters[-1] = hconcat([self.characters[-2], self.characters[-1]])
-                self.characters.pop(-2)
+                    dp_index -= 1
+        except IndexError:
+            pass
+
+        try:
+            # If the last character is too small, merge left
+            if self.characters[-1].shape[1] < 11 and len(self.characters) != self.max_length:
+                self.characters[-2] = hconcat([self.characters[-2], self.characters[-1]])
+                self.characters.pop(-1)
+
+                # If character -1 is a split and so is character -3, character -3 must belong to character -4
+                if self.characters[-2].shape[1] < 11:
+                    self.characters[-3] = hconcat([self.characters[-3], self.characters[-2]])
+                    self.characters.pop(-2)
+        except IndexError:
+            pass
+
+        try:
+            # If the character before the decimal is too small, merge left
+            if self.characters[dp_index - 1].shape[1] < 11 and len(self.characters) != self.max_length:
+                self.characters[dp_index - 2] = hconcat([self.characters[dp_index - 2], self.characters[dp_index - 1]])
+                self.characters.pop(dp_index - 1)
+                dp_index -= 1
+
+                # If the character before and 2 before the decimal is too small,
+                # 2 before must belong to the character 3 before
+                if self.characters[dp_index - 2].shape[1] < 11:
+                    self.characters[dp_index - 3] = hconcat([self.characters[dp_index - 3], self.characters[dp_index - 2]])
+                    self.characters.pop(dp_index - 2)
+                    dp_index -= 1
+        except IndexError:
+            pass
+
+        try:
+            # If the character after the decimal is too small, merge right
+            if self.characters[dp_index + 1].shape[1] < 11 and len(self.characters) != self.max_length:
+                self.characters[dp_index + 1] = hconcat([self.characters[dp_index + 1], self.characters[dp_index + 2]])
+                self.characters.pop(dp_index + 2)
+
+                # If the character after and 2 after the decimal is too small,
+                # 2 after must belong to the character 3 after
+                if self.characters[dp_index + 2].shape[1] < 11:
+                    self.characters[dp_index + 2] = hconcat([self.characters[dp_index + 2], self.characters[dp_index + 3]])
+                    self.characters.pop(dp_index + 3)
+        except IndexError:
+            pass
+
+        try:
+            # If only 1 split between 2 numbers in the first half of the number, join the the smallest
+            if self.characters[1].shape[1] < 11 and len(self.characters) != self.max_length:
+                left = self.characters[0].shape[1]
+                right = self.characters[2].shape[1]
+
+                if right > left:
+                    self.characters[0] = hconcat([self.characters[0], self.characters[1]])
+                    self.characters.pop(1)
+                else:
+                    self.characters[2] = hconcat([self.characters[1], self.characters[2]])
+                    self.characters.pop(1)
+                    dp_index -= 1
+        except:
+            pass
+
+        try:
+            # If only 1 split between 2 numbers in the second half of the number, join the the smallest
+            if self.characters[-2].shape[1] < 11 and len(self.characters) != self.max_length:
+                left = self.characters[-3].shape[1]
+                right = self.characters[-1].shape[1]
+
+                if right > left:
+                    self.characters[-3] = hconcat([self.characters[-3], self.characters[-2]])
+                    self.characters.pop(-2)
+                else:
+                    self.characters[-1] = hconcat([self.characters[-2], self.characters[-1]])
+                    self.characters.pop(-2)
+        except:
+            pass
 
         # Resize the characters and predict
         self.resize_characters()

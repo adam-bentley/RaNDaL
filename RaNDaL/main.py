@@ -55,6 +55,7 @@ def live_mode(model, rn, load_entry_list):
         entry_list = []
 
     prev_prediction_list = ('', '')
+    cwn = CellWarningNotification()
 
     capture = VideoCapture("http://10.10.1.11:8081/video.mjpg")
     while capture.isOpened():
@@ -67,7 +68,7 @@ def live_mode(model, rn, load_entry_list):
             prev_prediction_list = rs.to_tuple()
 
         if rs.cell_warning.active:
-            CellWarningNotification().alert()
+            cwn.alert()
 
         if load_entry_list:
             if current_category != rn.select_current_category_id():
@@ -75,6 +76,7 @@ def live_mode(model, rn, load_entry_list):
                 entry_list = rn.select_entry_list(current_category)
                 entry_list.append("NONE")
                 entry_list.append("BYE")
+                category_name = rn.select_current_category_name(current_category)
 
 
 if __name__ == "__main__":
