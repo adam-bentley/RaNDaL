@@ -4,6 +4,7 @@ from terminaltables import AsciiTable
 import json
 
 from RaNDaL.packages.helpers.preprocessing import median_filter, gray, threshold
+from RaNDaL.packages.helpers.segmentation import split_characters
 from RaNDaL.packages.models.text_fields.tree_field import Tree
 from RaNDaL.packages.models.text_fields.incremental_field import IncrementalField
 from RaNDaL.packages.models.text_fields.racenumber_field import RaceNumberField
@@ -21,6 +22,12 @@ class RaceScreen:
         image = gray(image)
         image = threshold(image)
 
+        # Check its a valid racescreen
+        if len(split_characters(image[0:45, 1750:1950])) == 0:
+            self.valid = False
+            return
+
+        self.valid = True
         self.category_name = category_name
 
         # Tree

@@ -1,5 +1,7 @@
+import cv2
 from numpy import sum, ndarray
-from cv2 import hconcat
+import numpy as np
+from cv2 import hconcat, imshow, waitKey
 
 
 def calc_projection(image: ndarray, orientation: int = 0,
