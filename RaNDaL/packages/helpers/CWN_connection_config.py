@@ -2,7 +2,7 @@ from configparser import ConfigParser
 
 
 def config(
-        filename: str = "files//configs//discord_bot_tokens//cell_warning_notification.ini",
+        filename: str = "../../_Configs/Discord/Webhooks/cell_warning_notification.ini",
         section: str = "Discord") -> dict:
     """
     Gets the database info from the .ini file

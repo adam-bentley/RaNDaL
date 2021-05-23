@@ -1,8 +1,9 @@
+import os
 from configparser import ConfigParser
 
 
 def config(
-        filename: str = "files//configs//db_configs//racenetdb.ini",
+        filename: str = "../../_Configs/Database/Postgres/Racenet/racenetdb.ini",
         section: str = "Postgres") -> dict:
     """
     Gets the database info from the .ini file
