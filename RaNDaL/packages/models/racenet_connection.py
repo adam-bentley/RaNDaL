@@ -1,6 +1,5 @@
 from psycopg2 import DatabaseError, connect
 
-from RaNDaL.packages.models.racescreen import RaceScreen
 from RaNDaL.packages.helpers.racenet_connection_config import config
 
 
