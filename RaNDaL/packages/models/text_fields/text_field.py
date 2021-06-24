@@ -60,6 +60,11 @@ class TextArea:
             imshow(self.characters[0], cmap='gray')
             show()
 
+    def get_text(self) -> str:
+        if self.text == '':
+            return None
+        return self.text
+
 
 def decode_labels(encoded_labels: list) -> str:
     """

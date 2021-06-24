@@ -104,12 +104,11 @@ class RaceScreen:
         return table.table
 
     def to_tuple(self) -> tuple:
-        query = ("",
+        query = ["2016-06-22 19:10:25-07",
                  self.tree.text,
-                 "",
+                 '',
                  str(self.cell_warning.active),
-                 "",
-
+                 '',
                  self.left_race_num.text,
                  str(self.left_staged.active),
                  self.left_dial_in.text,
@@ -138,7 +137,10 @@ class RaceScreen:
                  self.right_1320_et.text,
                  self.right_1320_speed.text,
                  self.right_next_race_num.text,
-                 self.right_next_dial_in.text,
-                 )
+                 self.right_next_dial_in.text, ]
 
-        return query
+        for i in range(0, len(query) - 1):
+            if query[i] == '':
+                query[i] = None
+
+        return tuple(query)

@@ -13,9 +13,9 @@ class CellWarningNotification:
         self.last_message_time = time.perf_counter() - 60
         wb = config()
         self.webhook = Webhook.partial(wb['id'], wb['token'], adapter=RequestsWebhookAdapter())
-        self.timing_role_id = wb['timingrole']
+#        self.timing_role_id = wb['timingrole']
 
     def alert(self):
         if self.last_message_time + 60 < time.perf_counter():
-            self.webhook.send("<@" + self.timing_role_id + "> CELL WARNING!")
+#            self.webhook.send("<@" + self.timing_role_id + "> CELL WARNING!")
             self.last_message_time = time.perf_counter()

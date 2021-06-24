@@ -1,6 +1,7 @@
 from psycopg2 import DatabaseError, connect
 
 from RaNDaL.packages.helpers.racenet_connection_config import config
+from RaNDaL.packages.models.racescreen import RaceScreen
 
 
 class RacenetConnection:
@@ -119,7 +120,7 @@ class RacenetConnection:
             self.close_connection()
         return racenumbers
 
-    def insert_predictions(self, predictions: tuple):
+    def insert_predictions(self, rs: RaceScreen):
         """
 		Clear the cnn_prediction table and
         Insert new predictions into the database
@@ -132,17 +133,38 @@ class RacenetConnection:
             cur.execute("DELETE FROM cnn_currentpair")
 
             sql = """
-            INSERT INTO public.cnn_currentpair(
-	            datetime, tree, towerready, cellwarning, runactive, 
-	            leftracenum, leftstaged, leftindex, 
-	            leftreaction, leftet60, leftet330, leftet660, leftspeed660, 
-	            leftet1000, leftspeed1000, leftet1320, leftspeed1320, 
-	            leftnextracenum, leftnextindex, 
-	            rightracenum, rightstaged, rightindex, 
-	            rightreaction, rightet60, rightet330, rightet660, rightspeed660, 
-	            rightet1000, rightspeed1000, rightet1320, rightspeed1320, 
-	            rightnextracenum, rightnextindex)
-	        VALUES """ + str(tuple)
+                INSERT INTO public.cnn_currentpair(
+                datetime, towerready, cellwarning, runactive, leftracenum, leftstaged, leftindex, leftreaction, leftet60, 
+                leftet330, leftet660, leftspeed660, leftet1000, leftspeed1000, leftet1320, leftspeed1320, leftnextracenum, 
+                leftnextindex, rightracenum, rightstaged, rightindex, rightreaction, rightet60, rightet330, rightet660, 
+                rightspeed660, rightet1000, rightspeed1000, rightet1320, rightspeed1320, rightnextracenum, rightnextindex, 
+                tree) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+	        """
+
+            # cur.execute(sql, (None, None, None, None, None,
+            #                   None, None, None, None,
+            #                   None, None, None,
+            #                   None, None, None,
+            #                   None, None, None,
+            #                   None, None, None, None,
+            #                   None, None, None,
+            #                   None, None, None,
+            #                   None, None, None,
+            #                   None, None))
+
+            cur.execute(sql, (None, None, rs.cell_warning.active, None, rs.left_race_num.get_text()[:8],
+                              rs.left_staged.active, rs.left_dial_in.get_text(), rs.left_reaction.get_text(),
+                              rs.left_60_et.get_text(), rs.left_330_et.get_text(), rs.left_660_et.get_text(),
+                              rs.left_660_speed.get_text(), rs.left_1000_et.get_text(), rs.left_1000_speed.get_text(),
+                              rs.left_1320_et.get_text(), rs.left_1320_speed.get_text(),
+                              rs.left_next_race_num.get_text(), rs.left_next_dial_in.get_text(),
+                              rs.right_race_num.get_text()[:8],
+                              rs.right_staged.active, rs.right_dial_in.get_text(), rs.right_reaction.get_text(),
+                              rs.right_60_et.get_text(), rs.right_330_et.get_text(), rs.right_660_et.get_text(),
+                              rs.right_660_speed.get_text(), rs.right_1000_et.get_text(), rs.right_1000_speed.get_text(),
+                              rs.right_1320_et.get_text(), rs.right_1320_speed.get_text(),
+                              rs.right_next_race_num.get_text(), rs.right_next_dial_in.get_text(), rs.tree.get_text()))
 
             self.conn.commit()
             cur.close()

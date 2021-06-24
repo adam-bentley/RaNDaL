@@ -4,7 +4,6 @@ import os
 
 from cv2.cv2 import VideoCapture, imread, imshow, waitKey, resize, destroyAllWindows
 from tensorflow.python.keras.models import load_model
-import asyncio
 
 from RaNDaL.packages.models.racescreen import RaceScreen
 from RaNDaL.packages.models.racenet_connection import RacenetConnection
@@ -66,8 +65,12 @@ def live_mode(model, rn, load_entry_list):
             continue
 
         if not identical_prediction_lists(prev_prediction_list, rs.to_tuple()):
-            rn.insert_predictions(rs.to_tuple())
+            rn.insert_predictions(rs)
+
             print(rs.to_table())
+            # print(prev_prediction_list)
+            # print(rs.to_tuple())
+            # input()
             prev_prediction_list = rs.to_tuple()
 
         if rs.cell_warning.active:
